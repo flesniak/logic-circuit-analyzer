@@ -1,0 +1,8 @@
+*/*.[oa]
+*.[oa]
+lca
+lca.depend
+lca.layout
+*.txt
+bin/
+obj/
