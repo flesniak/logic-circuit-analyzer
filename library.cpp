@@ -60,14 +60,15 @@ bool Library::parseLibraryFile()
     short ei, kl, cl, tsetup, thold, ct;
     tpd0 = ei = kl = cl = tsetup = thold = ct = 0;
     clearLibrary();
-    while( !fileReader.eof() ) {
-        getline(fileReader,line);
-        if( line.size() < 2 //drop empty or 1-char lines
+    while( getline(fileReader,line) ) {
+        if( fileReader.eof() )
+            line = "EOF";
+        if( line.size() < 2 //drop empty or 1-char lines, but continue on eof-case
          || line[0] == '#' || line[0] == '/' //drop comments
          || (name.empty() && line[0] != '[') //while searching for a part, drop lines with trash
          || line.substr(0,2) == "[[" ) //drop [[-Elements
             continue;
-        if( !name.empty() && line[0] == '[' ) { //Part complete, save it!
+        if( !name.empty() && (line[0] == '[' || line == "EOF") ) { //Part complete, save it!
             if( ei == 0 || tpd0 == 0 || kl == 0 || cl == 0 || (tsetup+thold+ct > 0 && (tsetup == 0 || thold == 0 || ct == 0)) )
                 cout << "WARNING: Incomplete part " << name << endl;
             else {
@@ -79,6 +80,8 @@ bool Library::parseLibraryFile()
             name.clear();
             tpd0 = ei = kl = cl = tsetup = thold = ct = 0;
         }
+        if( line == "EOF" )
+            break;
         if( !name.empty() ) { //Processing part ...
             size_t pos = line.find(':');
             string parameter = line.substr(0,pos);

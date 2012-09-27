@@ -20,7 +20,7 @@ class Gate
         short getLoadFactor() const;
         short getLoadCapacity() const;
         short getInputCount() const;
-        bool getIsFlipflop() const;
+        virtual bool getIsFlipflop() const;
     private:
         const string p_name;
         const double p_tpd0;
