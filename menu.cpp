@@ -1,15 +1,24 @@
 #include "menu.h"
 
+#include "factors.h"
+#include "library.h"
+#include "signallistcreator.h"
+#include "graphcreator.h"
+
+#include "listelement.h"
+#include "gateelement.h"
+
 #include <iostream>
 
 //static const char *header = "******************************************\n*      IT-Projektpraktikum WS12/13       *\n* Laufzeitanalyse synchroner Schaltwerke *\n******************************************\n";
-static const char *header = "PIT 2012/13\n";
+static const char *header = "PIT 2012/13";
 
 Menu::Menu()
 {
     p_factors = new Factors;
     p_library = new Library;
     p_signalListCreator = new SignalListCreator;
+    p_graphCreator = new GraphCreator(p_library,p_signalListCreator);
 }
 
 void Menu::displayMenu()
@@ -193,8 +202,19 @@ void Menu::circuitMenu()
                            break;
                 case '3' : p_signalListCreator->printSignals();
                            break;
-                case '4' : //p_signalListCreator->printSignals();
+                case '4' : {
+                           cout << "Eingelesene Gatter im Graph:" << endl;
+                           const ListElement* element = p_graphCreator->getFirstElement();
+                           while( element != 0 ) {
+                               cout << "Gatter " << element->getGateElement()->getName() << " (Typ " << element->getGateElement()->getGateType() << "), Ziele: ";
+                               unsigned int successorCount = element->getGateElement()->getSuccessorCount();
+                               for( unsigned int i = 0; i < successorCount; i++ )
+                                   cout << element->getGateElement()->getSuccessor(i)->getName() << (i == successorCount-1 ? "" : ", ");
+                               cout << endl;
+                               element = element->getNextElement();
+                           }
                            break;
+                           }
                 case '5' : exit = true;
                            break;
                 default : cout << "Ungültige Eingabe" << endl;

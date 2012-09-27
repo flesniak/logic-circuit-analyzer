@@ -34,8 +34,18 @@
 		</Compiler>
 		<Unit filename="factors.cpp" />
 		<Unit filename="factors.h" />
+		<Unit filename="flipflop.cpp" />
+		<Unit filename="flipflop.h" />
+		<Unit filename="gate.cpp" />
+		<Unit filename="gate.h" />
+		<Unit filename="gateelement.cpp" />
+		<Unit filename="gateelement.h" />
+		<Unit filename="graphcreator.cpp" />
+		<Unit filename="graphcreator.h" />
 		<Unit filename="library.cpp" />
 		<Unit filename="library.h" />
+		<Unit filename="listelement.cpp" />
+		<Unit filename="listelement.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="menu.cpp" />
 		<Unit filename="menu.h" />

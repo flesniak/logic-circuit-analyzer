@@ -1,11 +1,12 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "factors.h"
-#include "library.h"
-#include "signallistcreator.h"
-
 #include <string>
+
+class Factors;
+class Library;
+class SignalListCreator;
+class GraphCreator;
 
 using namespace std;
 
@@ -18,6 +19,7 @@ class Menu
         Factors *p_factors;
         Library *p_library;
         SignalListCreator *p_signalListCreator;
+        GraphCreator* p_graphCreator;
 
         void factorsMenu();
         void libraryMenu();

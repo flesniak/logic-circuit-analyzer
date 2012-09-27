@@ -22,6 +22,9 @@ class SignalListCreator
         vector<Signal*> getSignalList();
         unsigned int getSignalCount();
         long getFrequency() const;
+
+        friend class GraphCreator;
+
     private:
         bool createSignalList();
         void parseCommaLine(string &line, string keyword, Signal::signalTypes signalType);

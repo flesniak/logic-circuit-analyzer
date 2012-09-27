@@ -117,7 +117,7 @@ bool SignalListCreator::createSignalList()
     string line;
     while( !fileReader.eof() ) {
         getline(fileReader,line);
-            cout << "DEBUG: processing line: " << line << endl;
+            //cout << "DEBUG: processing line: " << line << endl;
         if( line.size() > 2 && line.substr(0,2) == "//" ) //drop comments
             continue;
         if( line.size() > 12 && line.substr(0,13) == "ARCHITECTURE" ) //drop ARCH line
@@ -134,7 +134,7 @@ bool SignalListCreator::createSignalList()
                 p_frequency *= 1000000;
             if( line == "kHz" )
                 p_frequency *= 1000;
-            cout << "DEBUG: clock " << p_frequency << " line " << line << endl;
+                //cout << "DEBUG: clock " << p_frequency << " line " << line << endl;
             continue;
         }
         if( line.size() > 4 && line.substr(0,5) == "BEGIN" )

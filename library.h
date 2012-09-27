@@ -19,10 +19,12 @@ class Library
         void closeLibrary();
         void printLibraryFile();
         void printLibaryContents();
+        const Gate* getGate(const string& name) const;
 
     private:
         bool parseLibraryFile();
         bool tryOpenLibraryFile();
+        void clearLibrary();
         string p_libraryPath;
         ifstream fileReader;
         vector<const Gate*> p_gates;
