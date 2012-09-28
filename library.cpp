@@ -42,11 +42,14 @@ void Library::clearLibrary()
     p_gates.clear();
 }
 
-const Gate* Library::getGate(const string& name) const
+const Gate* Library::getGate(const string& name)
 {
+    if( p_gates.empty() && !parseLibraryFile() )
+        return 0; //no error message here, user already gets parser errors
     for(vector<const Gate*>::const_iterator it = p_gates.begin(); it != p_gates.end(); it++)
         if( (*it)->getName() == name )
             return *it;
+    cout << "WARNING: Unknown part " << name << " requested" << endl;
     return 0;
 }
 

@@ -19,7 +19,7 @@ class Library
         void closeLibrary();
         void printLibraryFile();
         void printLibaryContents();
-        const Gate* getGate(const string& name) const;
+        const Gate* getGate(const string& name);
 
     private:
         bool parseLibraryFile();

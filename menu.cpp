@@ -206,7 +206,7 @@ void Menu::circuitMenu()
                            cout << "Eingelesene Gatter im Graph:" << endl;
                            const ListElement* element = p_graphCreator->getFirstElement();
                            while( element != 0 ) {
-                               cout << "Gatter " << element->getGateElement()->getName() << " (Typ " << element->getGateElement()->getGateType() << "), Ziele: ";
+                               cout << "Gatter " << element->getGateElement()->getName() << " (Typ " << element->getGateElement()->getGateType()->getName() << "), Ziele: ";
                                unsigned int successorCount = element->getGateElement()->getSuccessorCount();
                                for( unsigned int i = 0; i < successorCount; i++ )
                                    cout << element->getGateElement()->getSuccessor(i)->getName() << (i == successorCount-1 ? "" : ", ");

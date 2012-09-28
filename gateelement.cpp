@@ -58,7 +58,7 @@ void GateElement::setIsInputElement(bool input)
     p_isInputElement = input;
 }
 
-void GateElement::setGateType(const Gate* const gateType)
+void GateElement::setGateType(const Gate* gateType)
 {
     p_gateType = gateType;
 }

@@ -19,7 +19,7 @@ class GateElement
         void addSuccessor(GateElement* successor);
         void setIsOutputElement(bool output);
         void setIsInputElement(bool input);
-        void setGateType(const Gate* const gateType);
+        void setGateType(const Gate* gateType);
     private:
         const string p_name;
         const Gate* p_gateType;

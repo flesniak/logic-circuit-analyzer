@@ -22,6 +22,7 @@ class GraphCreator
         bool createGraph();
         void deleteGraph();
         ListElement* searchElement(const string& name) const;
+        void insertElement(ListElement* element);
 };
 
 #endif // GRAPHCREATOR_H
