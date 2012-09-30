@@ -16,16 +16,19 @@ class GateElement
         vector<GateElement*> getSuccessors() const;
         bool getIsOutputElement() const;
         bool getIsInputElement() const;
+	double getBaseRuntime() const;
         void addSuccessor(GateElement* successor);
         void setIsOutputElement(bool output);
         void setIsInputElement(bool input);
         void setGateType(const Gate* gateType);
+	void setBaseRuntime(double runtime);
     private:
         const string p_name;
         const Gate* p_gateType;
         vector<GateElement*> p_successors;
         bool p_isInputElement;
         bool p_isOutputElement;
+	double p_baseRuntime;
 };
 
 #endif // GATEELEMENT_H

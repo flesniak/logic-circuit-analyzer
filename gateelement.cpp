@@ -1,7 +1,7 @@
 #include "gateelement.h"
 
 GateElement::GateElement(const Gate* gateType, const string& name)
-    : p_name(name), p_gateType(gateType), p_isInputElement(false), p_isOutputElement(false)
+    : p_name(name), p_gateType(gateType), p_isInputElement(false), p_isOutputElement(false), p_baseRuntime(0)
 {
 }
 
@@ -62,3 +62,14 @@ void GateElement::setGateType(const Gate* gateType)
 {
     p_gateType = gateType;
 }
+
+double GateElement::getBaseRuntime() const
+{
+    return p_baseRuntime;
+}
+
+void GateElement::setBaseRuntime(double runtime)
+{
+    p_baseRuntime = runtime;
+}
+

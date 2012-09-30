@@ -13,7 +13,7 @@ class GraphCreator
 {
     public:
         GraphCreator(Library* library, SignalListCreator* signalListCreator);
-        const ListElement* getFirstElement();
+        ListElement* getFirstElement();
     private:
         Library* p_library;
         SignalListCreator* p_signalListCreator;

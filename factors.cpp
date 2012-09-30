@@ -5,6 +5,7 @@ Factors::Factors()
     //Set environment defaults
     p_circVoltage = 1.2;
     p_circTemperature = 55;
+    p_processType = typical;
 
     //Initialize factor maps
     p_voltageMap[1.08] = 1.121557;

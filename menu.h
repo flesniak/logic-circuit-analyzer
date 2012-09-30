@@ -7,6 +7,7 @@ class Factors;
 class Library;
 class SignalListCreator;
 class GraphCreator;
+class GraphAnalyzer;
 
 using namespace std;
 
@@ -20,6 +21,7 @@ class Menu
         Library *p_library;
         SignalListCreator *p_signalListCreator;
         GraphCreator* p_graphCreator;
+	GraphAnalyzer* p_graphAnalyzer;
 
         void factorsMenu();
         void libraryMenu();

@@ -4,7 +4,7 @@
 #include "library.h"
 #include "signallistcreator.h"
 #include "graphcreator.h"
-
+#include "graphanalyzer.h"
 #include "listelement.h"
 #include "gateelement.h"
 
@@ -19,6 +19,7 @@ Menu::Menu()
     p_library = new Library;
     p_signalListCreator = new SignalListCreator;
     p_graphCreator = new GraphCreator(p_library,p_signalListCreator);
+    p_graphAnalyzer = new GraphAnalyzer(p_library,p_factors,p_graphCreator);
 }
 
 void Menu::displayMenu()
@@ -225,5 +226,5 @@ void Menu::circuitMenu()
 
 void Menu::analyze()
 {
-
+    p_graphAnalyzer->analyze();
 }

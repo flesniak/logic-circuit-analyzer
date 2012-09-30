@@ -74,7 +74,7 @@ ListElement* GraphCreator::searchElement(const string& name) const
     return 0;
 }
 
-const ListElement* GraphCreator::getFirstElement()
+ListElement* GraphCreator::getFirstElement()
 {
     if( p_firstElement == 0 )
         createGraph();
