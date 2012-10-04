@@ -42,6 +42,8 @@
 		<Unit filename="gateelement.h" />
 		<Unit filename="graphcreator.cpp" />
 		<Unit filename="graphcreator.h" />
+                <Unit filename="graphanalyzer.cpp" />
+                <Unit filename="graphanalyzer.h" />
 		<Unit filename="library.cpp" />
 		<Unit filename="library.h" />
 		<Unit filename="listelement.cpp" />
