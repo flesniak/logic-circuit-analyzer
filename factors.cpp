@@ -84,12 +84,11 @@ processType Factors::getProcessType() const
 
 bool Factors::setProcessType(processType type)
 {
-    if( p_processMap.count(type) == 0 )
-        return false;
-    else {
+    if( p_processMap.count(type) ) {
         p_processType = type;
         return true;
-    }
+    } else
+        return false;
 }
 
 double Factors::getProcessFactor() const
@@ -110,5 +109,6 @@ string Factors::processTypeToString(processType type)
         case slow : return "Slow";
         case typical : return "Typical";
         case fast : return "Fast";
+        default : return string();
     };
 }

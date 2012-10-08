@@ -103,16 +103,16 @@ void Menu::factorsMenu()
                            break;
                 case '3' : cout << "Neuer Prozesstyp: (";
                            for(unsigned short i = 0; i < 3; i++)
-                            cout << i+1 << ": " << p_factors->processTypeToString((processType)i) << ", ";
+                            cout << i+1 << ": " << p_factors->processTypeToString((processType)i) + ( (i == 2) ? "" : ", " );
                            cout << "): ";
                            short type;
                            cin >> type;
-                           if( p_factors->setProcessType((processType)type) )
-                                cout << "Prozesstyp geändert zu " << p_factors->processTypeToString((processType)type) << "(" << type << ") Volt." << endl;
+                           if( p_factors->setProcessType((processType)(type-1)) )
+                                cout << "Prozesstyp geändert zu " << p_factors->processTypeToString(p_factors->getProcessType()) << " (" << type << ")." << endl;
                            else
                                 cout << "Prozesstyp ungültig. Keine Änderung vorgenommen." << endl;
                            break;
-                case '4' :
+                case '4' : cout << "Faktoren: Kv=" << p_factors->getVoltageFactor() << " | KT=" << p_factors->getTempFactor() << " | Kp=" << p_factors->getProcessFactor() << endl;
                            break;
                 case '5' : exit = true;
                            break;
@@ -207,8 +207,14 @@ void Menu::circuitMenu()
                            cout << "Eingelesene Gatter im Graph:" << endl;
                            const ListElement* element = p_graphCreator->getFirstElement();
                            while( element != 0 ) {
-                               cout << "Gatter " << element->getGateElement()->getName() << " (Typ " << element->getGateElement()->getGateType()->getName() << "), Ziele: ";
+                               cout << "Gatter " << element->getGateElement()->getName() << " (Typ " << element->getGateElement()->getGateType()->getName() << ")";
+                               if( element->getGateElement()->getIsInputElement() )
+                                   cout << ", Input";
+                               if( element->getGateElement()->getIsOutputElement() )
+                                   cout << ", Output";
                                unsigned int successorCount = element->getGateElement()->getSuccessorCount();
+                               if( successorCount )
+                                   cout << ", Ziele: ";
                                for( unsigned int i = 0; i < successorCount; i++ )
                                    cout << element->getGateElement()->getSuccessor(i)->getName() << (i == successorCount-1 ? "" : ", ");
                                cout << endl;
@@ -226,5 +232,12 @@ void Menu::circuitMenu()
 
 void Menu::analyze()
 {
-    p_graphAnalyzer->analyze();
+    if(  p_graphAnalyzer->analyze() ) {
+        cout << "Überführungspfad: " << p_graphAnalyzer->getTransitionPath() << endl;
+        cout << "Maximale Laufzeit: " << p_graphAnalyzer->getTransitionPathRuntime() << endl;
+        cout << "Ausgangspfad: " << p_graphAnalyzer->getOutputPath() << endl;
+        cout << "Maximale Laufzeit: " << p_graphAnalyzer->getOutputPathRuntime() << endl;
+        cout << "Maximale Frequenz: " << p_graphAnalyzer->getMaxFrequency() << endl;
+    } else
+        cout << "Fehler beim Analysieren!" << endl;
 }
