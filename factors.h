@@ -30,7 +30,7 @@ class Factors
         double p_circVoltage;
         double p_circTemperature;
         processType p_processType;
-        map<double,double> p_voltageMap;
+        map<short,double> p_voltageMap;
         map<short,double> p_tempMap;
         map<processType,double> p_processMap;
 };

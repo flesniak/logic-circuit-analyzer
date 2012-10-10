@@ -1,20 +1,22 @@
 #include "factors.h"
 
+#include <cmath>
+
 Factors::Factors()
 {
     //Set environment defaults
-    p_circVoltage = 1.2;
+    p_circVoltage = 120;
     p_circTemperature = 55;
-    p_processType = typical;
+    p_processType = slow; //typical
 
     //Initialize factor maps
-    p_voltageMap[1.08] = 1.121557;
-    p_voltageMap[1.12] = 1.075332;
-    p_voltageMap[1.16] = 1.035161;
-    p_voltageMap[1.20] = 1;
-    p_voltageMap[1.24] = 0.968480;
-    p_voltageMap[1.28] = 0.940065;
-    p_voltageMap[1.32] = 0.914482;
+    p_voltageMap[108] = 1.121557;
+    p_voltageMap[112] = 1.075332;
+    p_voltageMap[116] = 1.035161;
+    p_voltageMap[120] = 1;
+    p_voltageMap[124] = 0.968480;
+    p_voltageMap[128] = 0.940065;
+    p_voltageMap[132] = 0.914482;
 
     p_tempMap[-25] = 0.897498;
     p_tempMap[-15] = 0.917532;
@@ -44,17 +46,20 @@ double Factors::getCircVoltage() const
 
 bool Factors::setCircVoltage(double voltage)
 {
-    if( p_voltageMap.count(voltage) == 0 )
+    if( voltage < -25 || voltage > 125 )
         return false;
-    else {
-        p_circVoltage = voltage;
-        return true;
-    }
+    p_circVoltage = voltage*100; //internal centi-Volts
+    return true;
 }
 
 double Factors::getVoltageFactor() const
 {
-    return (*(p_voltageMap.find(p_circVoltage))).second;
+    const short delta = 4;
+    const short lowest = 108;
+    const short upper = ceil((p_circVoltage-lowest)/delta)*delta+lowest;
+    const short lower = floor((p_circVoltage-lowest)/delta)*delta+lowest;
+    const double m = ( (*(p_voltageMap.find(upper))).second - (*(p_voltageMap.find(lower))).second ) / delta;
+    return (*(p_voltageMap.find(lower))).second + m * (p_circVoltage - lower);
 }
 
 double Factors::getCircTemperature() const
@@ -64,17 +69,32 @@ double Factors::getCircTemperature() const
 
 bool Factors::setCircTemperature(double temp)
 {
-    if( p_tempMap.count(temp) == 0 )
+    if( temp < -25 || temp > 125 )
         return false;
-    else {
-        p_circTemperature = temp;
-        return true;
-    }
+    p_circTemperature = temp;
+    return true;
 }
-
+#include <iostream>
+using namespace std;
 double Factors::getTempFactor() const
 {
-    return (*(p_tempMap.find(p_circTemperature))).second;
+    const short lowest = -25;
+    short delta, upper, lower;
+    if( p_circTemperature > -15 && p_circTemperature < 0 ) { //fuzzy workaround for non-linear distributed values
+        delta = 15;
+        upper = 0;
+        lower = -15;
+    } else if( p_circTemperature > 0 && p_circTemperature < 15 ) {
+        delta = 15;
+        upper = 15;
+        lower = 0;
+    } else {
+        delta = 10;
+        upper = ceil((p_circTemperature-lowest)/delta)*delta+lowest;
+        lower = floor((p_circTemperature-lowest)/delta)*delta+lowest;
+    }
+    const double m = ( (*(p_tempMap.find(upper))).second - (*(p_tempMap.find(lower))).second ) / delta;
+    return (*(p_tempMap.find(lower))).second + m * (p_circTemperature - lower);
 }
 
 processType Factors::getProcessType() const
@@ -87,8 +107,8 @@ bool Factors::setProcessType(processType type)
     if( p_processMap.count(type) ) {
         p_processType = type;
         return true;
-    } else
-        return false;
+    }
+    return false;
 }
 
 double Factors::getProcessFactor() const
