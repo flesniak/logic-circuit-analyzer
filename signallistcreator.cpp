@@ -117,7 +117,6 @@ bool SignalListCreator::createSignalList()
     string line;
     while( !fileReader.eof() ) {
         getline(fileReader,line);
-            //cout << "DEBUG: processing line: " << line << endl;
         if( line.size() > 2 && line.substr(0,2) == "//" ) //drop comments
             continue;
         if( line.size() > 12 && line.substr(0,13) == "ARCHITECTURE" ) //drop ARCH line
@@ -125,8 +124,10 @@ bool SignalListCreator::createSignalList()
         if( line.size() > 5 && line.substr(0,6) == "ENTITY" ) //drop entity
             continue;
         if( line.size() > 5 && line.substr(0,5) == "CLOCK" ) {
-            istringstream iss(line.substr(line.find(", ")+1).substr(0,line.find(';')-1));
+            line = line.substr(line.find(", ")+1);
+            istringstream iss(line.substr(0,line.find(';')));
             iss >> p_frequency;
+            line.clear();
             iss >> line;
             if( line == "GHz" )
                 p_frequency *= 1000000000;
@@ -134,7 +135,6 @@ bool SignalListCreator::createSignalList()
                 p_frequency *= 1000000;
             if( line == "kHz" )
                 p_frequency *= 1000;
-                //cout << "DEBUG: clock " << p_frequency << " line " << line << endl;
             continue;
         }
         if( line.size() > 4 && line.substr(0,5) == "BEGIN" )
