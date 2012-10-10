@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-SignalListCreator::SignalListCreator()
+SignalListCreator::SignalListCreator() : p_frequency(0)
 {
     p_circuitPath = "csd.txt";
 }
@@ -14,6 +14,14 @@ SignalListCreator::~SignalListCreator()
         fileReader.close();
 }
 
+void SignalListCreator::clear()
+{
+    p_frequency = 0;
+    for(vector<Signal*>::iterator it = p_signalList.begin(); it != p_signalList.end(); it++)
+        delete *it;
+    p_signalList.clear();
+}
+
 string SignalListCreator::getCircuitPath() const
 {
     return p_circuitPath;
@@ -21,6 +29,7 @@ string SignalListCreator::getCircuitPath() const
 
 bool SignalListCreator::setCircuitPath(string path)
 {
+    clear();
     p_circuitPath = path;
     return tryOpenFile();
 }

@@ -18,6 +18,7 @@ class SignalListCreator
         string getCircuitPath() const;
         void printCircuitFile();
         void printSignals();
+        void clear();
 
         vector<Signal*> getSignalList();
         unsigned int getSignalCount();
