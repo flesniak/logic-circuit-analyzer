@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 
 SignalListCreator::SignalListCreator() : p_frequency(0)
 {
@@ -155,6 +156,12 @@ bool SignalListCreator::createSignalList()
         parseSignalLine(line,"SIGNALS",Signal::internal);
         parseGateLine(line);
     }
+    for(vector<Signal*>::iterator it = p_signalList.begin(); it != p_signalList.end(); it++) //unused signal detection
+        if( (*it)->getSource().empty() && (*it)->getTargetCount() == 0 ) {
+            cout << "WARNUNG: Signal s" << setfill('0') << setw(3) << (int)(it-p_signalList.begin()) << " hat weder Quelle noch Ziel. Wird ignoriert, dadurch wird die Signalnummerierung geändert." << endl;
+            delete *it;
+            p_signalList.erase(it);
+        }
     return !p_error;
 }
 
