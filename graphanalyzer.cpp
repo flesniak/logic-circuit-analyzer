@@ -7,9 +7,6 @@
 #include "listelement.h"
 #include "flipflop.h"
 
-//#include <iostream>
-//using namespace std;
-
 GraphAnalyzer::GraphAnalyzer(Library* library, Factors* factors, GraphCreator* graphCreator)
     : p_library(library), p_factors(factors), p_graphCreator(graphCreator), p_outputPathRuntime(0), p_transitionPathRuntime(0)
 {
@@ -21,6 +18,8 @@ GraphAnalyzer::~GraphAnalyzer()
 
 bool GraphAnalyzer::analyze()
 {
+    if( p_graphCreator->getFirstElement() == 0 ) //graphCreator unsuccessful
+        return false;
     if( !calculateBaseTimes() )
         return false;
     p_outputPath.clear();

@@ -94,7 +94,6 @@ void SignalListCreator::printSignals()
         cout << endl;
         it++;
     }
-    cout << endl;
 }
 
 long SignalListCreator::getFrequency() const
@@ -124,7 +123,8 @@ bool SignalListCreator::createSignalList()
     p_frequency = 0;
     p_signalList.clear();
     string line;
-    while( !fileReader.eof() ) {
+    p_error = false;
+    while( !fileReader.eof() && !p_error ) {
         getline(fileReader,line);
         if( line.size() > 2 && line.substr(0,2) == "//" ) //drop comments
             continue;
@@ -155,7 +155,7 @@ bool SignalListCreator::createSignalList()
         parseCommaLine(line,"SIGNALS",Signal::internal);
         parseGateLine(line);
     }
-    return true;
+    return !p_error;
 }
 
 void SignalListCreator::parseCommaLine(string &line, string keyword, Signal::signalTypes signalType)
@@ -209,13 +209,15 @@ void SignalListCreator::parseGateLine(string &line)
         if( p_signalList.size() < index || index == 0 ) //signal invalid
             continue;
         if( signals.empty() ) { //last line entry is source
-            if( !p_signalList.at(index-1)->getSource().empty() )
-                cout << "WARNING: Double source on signal " << signalStr << endl;
+            if( !p_signalList.at(index-1)->getSource().empty() ) {
+                cout << "FEHLER: Signal " << signalStr << " hat zwei Quellen!" << endl;
+                p_error = true;
+            }
             p_signalList.at(index-1)->setSource(gateName);
             p_signalList.at(index-1)->setSourceType(gateType);
         } else {
             if( p_signalList.at(index-1)->hasTarget(gateName) )
-                cout << "WARNING: Double target " << gateName << " on signal " << signalStr << endl;
+                cout << "WARNUNG: Signal " << signalStr << " hat Gate " << gateName << " zweimal als Ziel. Wird ignoriert." << endl; //no need to set p_error here!
             else
                 p_signalList.at(index-1)->addTarget(gateName);
         }

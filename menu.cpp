@@ -231,7 +231,7 @@ void Menu::circuitMenu()
 
 void Menu::analyze()
 {
-    if(  p_graphAnalyzer->analyze() ) {
+    if( p_graphAnalyzer->analyze() ) {
         cout << "Überführungspfad: " << p_graphAnalyzer->getTransitionPath() << endl;
         cout << "Maximale Laufzeit Überführungspfad: " << p_graphAnalyzer->getTransitionPathRuntime() << " ps" << endl << endl;
         cout << "Ausgangspfad: " << p_graphAnalyzer->getOutputPath() << endl;

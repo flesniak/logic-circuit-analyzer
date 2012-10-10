@@ -35,6 +35,7 @@ class SignalListCreator
         string p_circuitPath;
         vector<Signal*> p_signalList;
         long p_frequency;
+        bool p_error;
 };
 
 #endif // SIGNALLISTCREATOR_H

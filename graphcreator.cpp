@@ -6,6 +6,8 @@
 #include "signallistcreator.h"
 #include "signal.h"
 
+#include <iostream>
+
 GraphCreator::GraphCreator(Library* library, SignalListCreator* signalListCreator)
     : p_library(library), p_signalListCreator(signalListCreator), p_firstElement(0), p_lastElement(0)
 {
@@ -14,7 +16,8 @@ GraphCreator::GraphCreator(Library* library, SignalListCreator* signalListCreato
 bool GraphCreator::createGraph()
 {
     deleteGraph();
-    p_signalListCreator->createSignalList();
+    if( !p_signalListCreator->createSignalList() )
+        return false;
     if( p_signalListCreator->p_signalList.empty() )
         return false; //signalList empty, error!
 
@@ -22,8 +25,13 @@ bool GraphCreator::createGraph()
         ListElement* newElement = 0;
         if( (*it)->getSignalType() != Signal::input ) { //input signals don't have a source gate, only adjust targets!
             newElement = searchElement( (*it)->getSource() ); //maybe this element already exists with an invalid gateType
-            if( newElement ) //our element already exists, the gatetype must be invalid
+            if( newElement ) { //our element already exists, the gatetype must be invalid
+                if( newElement->getGateElement()->getGateType() ) { //gatetype already specified, this is an error!
+                    cout << "FEHLER: Gatter " << newElement->getGateElement()->getName() << " hat mehrere Signale am Ausgang (Kurzschluss)!" << endl;
+                    return false;
+                }
                 newElement->getGateElement()->setGateType( p_library->getGate( (*it)->getSourceType() ) );
+            }
             else {
                 newElement = new ListElement( new GateElement( p_library->getGate( (*it)->getSourceType() ), (*it)->getSource() ) );
                 insertElement(newElement);
@@ -31,7 +39,7 @@ bool GraphCreator::createGraph()
             if( (*it)->getSignalType() == Signal::output )
                 newElement->getGateElement()->setIsOutputElement(true);
         }
-        for(unsigned int i = 0; i < (*it)->getTargetCount(); i++) { //no need to escape output elements, these shall not have targets
+        for(unsigned int i = 0; i < (*it)->getTargetCount(); i++) { //process targets of newElement
             ListElement* successor = searchElement( (*it)->getTarget(i) );
             if( successor == 0 ) {
                 successor = new ListElement( new GateElement( 0, (*it)->getTarget(i) ) ); //create target gate without type
@@ -43,6 +51,8 @@ bool GraphCreator::createGraph()
                 newElement->getGateElement()->addSuccessor(successor->getGateElement());
         }
     }
+    //for(ListElement* element = p_firstElement; element != 0; element = element->getNextElement) {
+    //    if( element->getGateElement()->getSuccessorCount() > element->getGateElement->getGateType()->getInputCount() )
     return true;
 }
 
