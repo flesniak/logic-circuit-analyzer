@@ -16,6 +16,7 @@ class Menu
     public:
         Menu();
         void displayMenu();
+        static string packFrequency(double frequency);
     private:
         Factors *p_factors;
         Library *p_library;

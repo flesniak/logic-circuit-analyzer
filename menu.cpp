@@ -9,6 +9,7 @@
 #include "gateelement.h"
 
 #include <iostream>
+#include <sstream>
 
 //static const char *header = "******************************************\n*      IT-Projektpraktikum WS12/13       *\n* Laufzeitanalyse synchroner Schaltwerke *\n******************************************\n";
 static const char *header = "PIT 2012/13";
@@ -172,8 +173,6 @@ void Menu::circuitMenu()
 {
     bool exit = false;
     while( !exit ) {
-            //cout << header << endl;
-
             cout << "Untermenü: Schaltwerk" << endl;
             cout << "(1) Pfad zur Schaltwerksdatei: " << p_signalListCreator->getCircuitPath() << endl;
             cout << "(2) Ausgabe der Schaltnetzdatei" << endl;
@@ -234,10 +233,33 @@ void Menu::analyze()
 {
     if(  p_graphAnalyzer->analyze() ) {
         cout << "Überführungspfad: " << p_graphAnalyzer->getTransitionPath() << endl;
-        cout << "Maximale Laufzeit: " << p_graphAnalyzer->getTransitionPathRuntime() << endl;
+        cout << "Maximale Laufzeit Überführungspfad: " << p_graphAnalyzer->getTransitionPathRuntime() << " ps" << endl << endl;
         cout << "Ausgangspfad: " << p_graphAnalyzer->getOutputPath() << endl;
-        cout << "Maximale Laufzeit: " << p_graphAnalyzer->getOutputPathRuntime() << endl;
-        cout << "Maximale Frequenz: " << p_graphAnalyzer->getMaxFrequency() << endl;
+        cout << "Maximale Laufzeit Ausgangspfad: " << p_graphAnalyzer->getOutputPathRuntime() << " ps " << endl << endl;
+        cout << "Maximale Frequenz: " << packFrequency(p_graphAnalyzer->getMaxFrequency()) << endl;
+        if( p_graphAnalyzer->getMaxFrequency() < p_signalListCreator->getFrequency() )
+            cout << "WARNUNG: Maximale Frequenz (" << packFrequency(p_graphAnalyzer->getMaxFrequency()) << ") ist kleiner als die im Schaltplan angegebene Frequenz (" << packFrequency(p_signalListCreator->getFrequency()) << ")!" << endl;
     } else
         cout << "Fehler beim Analysieren!" << endl;
+    cout << endl;
+}
+
+string Menu::packFrequency(double frequency) //packs a frequency into a string and a decimal-exponent enhanced unit
+{
+    string frequencyPostfix("Hz");
+    if( frequency > 1e6 ) {
+        frequency /= 1000;
+        frequencyPostfix = "kHz";
+    }
+    if( frequency > 1e6 ) {
+        frequency /= 1000;
+        frequencyPostfix = "MHz";
+    }
+    if( frequency > 1e6 ) {
+        frequency /= 1000;
+        frequencyPostfix = "GHz";
+    }
+    ostringstream oss;
+    oss << frequency;
+    return oss.str() + " " + frequencyPostfix;
 }
