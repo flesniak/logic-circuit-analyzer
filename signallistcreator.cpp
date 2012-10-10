@@ -150,15 +150,15 @@ bool SignalListCreator::createSignalList()
             continue;
         if( line.size() > 2 && line.substr(0,3) == "END" )
             continue;
-        parseCommaLine(line,"INPUT",Signal::input);
-        parseCommaLine(line,"OUTPUT",Signal::output);
-        parseCommaLine(line,"SIGNALS",Signal::internal);
+        parseSignalLine(line,"INPUT",Signal::input);
+        parseSignalLine(line,"OUTPUT",Signal::output);
+        parseSignalLine(line,"SIGNALS",Signal::internal);
         parseGateLine(line);
     }
     return !p_error;
 }
 
-void SignalListCreator::parseCommaLine(string &line, string keyword, Signal::signalTypes signalType)
+void SignalListCreator::parseSignalLine(string &line, string keyword, Signal::signalTypes signalType)
 {
     if( !(line.size() > keyword.size()+1) || !(line.substr(0,keyword.size()+1) == keyword+" ") ) //do nothing on invalid strings
         return;
@@ -178,7 +178,7 @@ void SignalListCreator::parseCommaLine(string &line, string keyword, Signal::sig
             istringstream iss(keyword.substr(1,3));
             unsigned int index;
             iss >> index;
-            while( p_signalList.size() < index )
+            while( p_signalList.size() < index ) //taking care on correct signal numeration
                 p_signalList.push_back(new Signal);
             p_signalList.at(index-1)->setSignalType(signalType);
         }

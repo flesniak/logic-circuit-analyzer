@@ -28,7 +28,7 @@ class SignalListCreator
 
     private:
         bool createSignalList();
-        void parseCommaLine(string &line, string keyword, Signal::signalTypes signalType);
+        void parseSignalLine(string &line, string keyword, Signal::signalTypes signalType);
         void parseGateLine(string &line);
         bool tryOpenFile();
         ifstream fileReader;
