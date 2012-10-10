@@ -191,7 +191,7 @@ void Menu::circuitMenu()
                                if( path == "EXIT" )
                                    break;
                                if( p_signalListCreator->setCircuitPath(path) ) {
-                                   cout << "Bibliothek geöffnet: " << path << endl;
+                                   cout << "Schaltwerk geöffnet: " << path << endl;
                                    break;
                                }
                                else
