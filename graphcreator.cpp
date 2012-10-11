@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <map>
 
 GraphCreator::GraphCreator(Library* library, SignalListCreator* signalListCreator)
     : p_library(library), p_signalListCreator(signalListCreator), p_firstElement(0), p_lastElement(0)
@@ -22,6 +23,7 @@ bool GraphCreator::createGraph()
     if( p_signalListCreator->p_signalList.empty() )
         return false; //signalList empty, error!
 
+    map<GateElement*,unsigned char> inputCount;
     for(vector<Signal*>::iterator it = p_signalListCreator->p_signalList.begin(); it != p_signalListCreator->p_signalList.end(); it++) {
         while( it != p_signalListCreator->p_signalList.end() && (*it)->getSource().empty() && (*it)->getTargetCount() == 0 ) {
             cout << "WARNUNG: Signal s" << setfill('0') << setw(3) << (int)(it-p_signalListCreator->p_signalList.begin()+1) << " hat weder Quelle noch Ziel und wird ignoriert. Dadurch wird die Signalnummerierung geändert." << endl;
@@ -55,8 +57,12 @@ bool GraphCreator::createGraph()
                 successor->getGateElement()->setIsInputElement(true);
             else //input signals don't have a source
                 newElement->getGateElement()->addSuccessor(successor->getGateElement());
+            inputCount[successor->getGateElement()]++;
         }
     }
+    for( map<GateElement*,unsigned char>::iterator it = inputCount.begin(); it != inputCount.end(); it++ )
+        if( it->first->getGateType()->getInputCount() != it->second )
+            cout << "WARNUNG: Gatter " << it->first->getName() << " hat " << it->first->getGateType()->getInputCount() << " Eingänge, von denen nur " << (int)it->second << " beschaltet sind." << endl;
     return true;
 }
 
@@ -90,7 +96,7 @@ ListElement* GraphCreator::searchElement(const string& name) const
 
 ListElement* GraphCreator::getFirstElement()
 {
-    //if( p_firstElement == 0 )
+    if( p_firstElement == 0 )
         createGraph();
     return p_firstElement;
 }

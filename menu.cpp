@@ -191,6 +191,7 @@ void Menu::circuitMenu()
                                if( path == "EXIT" )
                                    break;
                                if( p_signalListCreator->setCircuitPath(path) ) {
+                                   p_graphCreator->deleteGraph(); //signalListCreator does not inform graphCreator about data changes, delete manually!
                                    cout << "Schaltwerk geöffnet: " << path << endl;
                                    break;
                                }

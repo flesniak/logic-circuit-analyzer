@@ -30,12 +30,13 @@ bool GraphAnalyzer::analyze()
     for( ListElement* element = p_graphCreator->getFirstElement(); element != 0; element = element->getNextElement() )
         if( element->getGateElement()->getIsInputElement() || element->getGateElement()->getGateType()->getIsFlipflop() ) { //valid start point
             p_dfsCache.clear(); //reset all cached data
-            doDfs(element->getGateElement(), element->getGateElement());
+            if( !doDfs(element->getGateElement(), element->getGateElement()) )
+                return false;
         }
 	return true;
 }
 
-void GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
+bool GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
 {
     vector<GateElement*> successors = element->getSuccessors();
     for(vector<GateElement*>::iterator it = successors.begin(); it != successors.end(); it++)
@@ -48,18 +49,22 @@ void GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
             if( p_dfsCache[*it].pathRuntime < p_dfsCache[element].pathRuntime + element->getBaseRuntime() ) {
                 if( ( p_dfsCache[*it].pathRuntime || *it == start ) && p_dfsCache[*it].predecessor != element ) {
                     p_dfsCache[*it].predecessor = element;
-                    if( traceBack(*it,element) )
-                        cout << "DEBUG: *it " << *it << " element " << element << " start " << start << endl;
+                    if( traceBack(*it,element) ) {
+                        cout << "FEHLER: Zyklus zwischen " << (*it)->getName() << " und " << element->getName() << " erkannt!" << endl;
+                        return false;
+                    }
                 }
                 p_dfsCache[*it].pathRuntime = p_dfsCache[element].pathRuntime + element->getBaseRuntime();
                 p_dfsCache[*it].predecessor = element;
-                doDfs(*it,start);
+                if( !doDfs(*it,start) )
+                    return false;
             }
         }
     if( element->getIsOutputElement() && p_outputPathRuntime < p_dfsCache[element].pathRuntime + element->getBaseRuntime() ) {
         p_outputPathRuntime = p_dfsCache[element].pathRuntime + element->getBaseRuntime();
         p_outputPath = createSequenceString(element,start);
     }
+    return true;
 }
 
 bool GraphAnalyzer::traceBack(GateElement* element, GateElement* target) //tries to go from element to target, but the reverse way!
