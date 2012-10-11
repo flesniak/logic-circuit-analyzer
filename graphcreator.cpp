@@ -7,6 +7,7 @@
 #include "signal.h"
 
 #include <iostream>
+#include <iomanip>
 
 GraphCreator::GraphCreator(Library* library, SignalListCreator* signalListCreator)
     : p_library(library), p_signalListCreator(signalListCreator), p_firstElement(0), p_lastElement(0)
@@ -22,6 +23,11 @@ bool GraphCreator::createGraph()
         return false; //signalList empty, error!
 
     for(vector<Signal*>::iterator it = p_signalListCreator->p_signalList.begin(); it != p_signalListCreator->p_signalList.end(); it++) {
+        while( it != p_signalListCreator->p_signalList.end() && (*it)->getSource().empty() && (*it)->getTargetCount() == 0 ) {
+            cout << "WARNUNG: Signal s" << setfill('0') << setw(3) << (int)(it-p_signalListCreator->p_signalList.begin()+1) << " hat weder Quelle noch Ziel. Wird ignoriert, dadurch wird die Signalnummerierung geändert." << endl;
+            delete *it;
+            p_signalListCreator->p_signalList.erase(it);
+        }
         ListElement* newElement = 0;
         if( (*it)->getSignalType() != Signal::input ) { //input signals don't have a source gate, only adjust targets!
             newElement = searchElement( (*it)->getSource() ); //maybe this element already exists with an invalid gateType
