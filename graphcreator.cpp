@@ -24,7 +24,7 @@ bool GraphCreator::createGraph()
 
     for(vector<Signal*>::iterator it = p_signalListCreator->p_signalList.begin(); it != p_signalListCreator->p_signalList.end(); it++) {
         while( it != p_signalListCreator->p_signalList.end() && (*it)->getSource().empty() && (*it)->getTargetCount() == 0 ) {
-            cout << "WARNUNG: Signal s" << setfill('0') << setw(3) << (int)(it-p_signalListCreator->p_signalList.begin()+1) << " hat weder Quelle noch Ziel. Wird ignoriert, dadurch wird die Signalnummerierung geändert." << endl;
+            cout << "WARNUNG: Signal s" << setfill('0') << setw(3) << (int)(it-p_signalListCreator->p_signalList.begin()+1) << " hat weder Quelle noch Ziel und wird ignoriert. Dadurch wird die Signalnummerierung geändert." << endl;
             delete *it;
             p_signalListCreator->p_signalList.erase(it);
         }
@@ -57,8 +57,6 @@ bool GraphCreator::createGraph()
                 newElement->getGateElement()->addSuccessor(successor->getGateElement());
         }
     }
-    //for(ListElement* element = p_firstElement; element != 0; element = element->getNextElement) {
-    //    if( element->getGateElement()->getSuccessorCount() > element->getGateElement->getGateType()->getInputCount() )
     return true;
 }
 

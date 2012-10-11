@@ -232,13 +232,19 @@ void Menu::circuitMenu()
 void Menu::analyze()
 {
     if( p_graphAnalyzer->analyze() ) {
-        cout << "Überführungspfad: " << p_graphAnalyzer->getTransitionPath() << endl;
-        cout << "Maximale Laufzeit Überführungspfad: " << p_graphAnalyzer->getTransitionPathRuntime() << " ps" << endl << endl;
+        if( p_graphAnalyzer->getTransitionPathRuntime() ) {
+            cout << "Überführungspfad: " << p_graphAnalyzer->getTransitionPath() << endl;
+            cout << "Maximale Laufzeit Überführungspfad: " << p_graphAnalyzer->getTransitionPathRuntime() << " ps" << endl << endl;
+        }
         cout << "Ausgangspfad: " << p_graphAnalyzer->getOutputPath() << endl;
         cout << "Maximale Laufzeit Ausgangspfad: " << p_graphAnalyzer->getOutputPathRuntime() << " ps " << endl << endl;
-        cout << "Maximale Frequenz: " << packFrequency(p_graphAnalyzer->getMaxFrequency()) << endl;
-        if( p_graphAnalyzer->getMaxFrequency() < p_signalListCreator->getFrequency() )
-            cout << "WARNUNG: Maximale Frequenz (" << packFrequency(p_graphAnalyzer->getMaxFrequency()) << ") ist kleiner als die im Schaltplan angegebene Frequenz (" << packFrequency(p_signalListCreator->getFrequency()) << ")!" << endl;
+        if( p_graphAnalyzer->getMaxFrequency() ) {
+            cout << "Maximale Frequenz: " << packFrequency(p_graphAnalyzer->getMaxFrequency()) << endl;
+            if( p_graphAnalyzer->getMaxFrequency() < p_signalListCreator->getFrequency() )
+                cout << "WARNUNG: Maximale Frequenz (" << packFrequency(p_graphAnalyzer->getMaxFrequency()) << ") ist kleiner als die im Schaltplan angegebene Frequenz (" << packFrequency(p_signalListCreator->getFrequency()) << ")!" << endl;
+        }
+        else
+            cout << "Schaltnetz hat keine taktgesteuerten Elemente." << endl;
     } else
         cout << "Fehler beim Analysieren!" << endl;
     cout << endl;
