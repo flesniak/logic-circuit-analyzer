@@ -14,13 +14,13 @@ class GraphCreator
     public:
         GraphCreator(Library* library, SignalListCreator* signalListCreator);
         ListElement* getFirstElement();
+        void deleteGraph();
     private:
         Library* p_library;
         SignalListCreator* p_signalListCreator;
         ListElement* p_firstElement;
         ListElement* p_lastElement;
         bool createGraph();
-        void deleteGraph();
         ListElement* searchElement(const string& name) const;
         void insertElement(ListElement* element);
 };

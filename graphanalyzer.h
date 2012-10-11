@@ -38,6 +38,7 @@ class GraphAnalyzer
         string p_transitionPath;
 
         bool calculateBaseTimes();
+        bool traceBack(GateElement* element, GateElement* target);
         void doDfs(GateElement* element, GateElement* start);
         string createSequenceString(GateElement* last, GateElement* first);
 };

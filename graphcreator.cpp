@@ -90,7 +90,7 @@ ListElement* GraphCreator::searchElement(const string& name) const
 
 ListElement* GraphCreator::getFirstElement()
 {
-    if( p_firstElement == 0 )
+    //if( p_firstElement == 0 )
         createGraph();
     return p_firstElement;
 }

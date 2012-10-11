@@ -7,6 +7,8 @@
 #include "listelement.h"
 #include "flipflop.h"
 
+#include <iostream>
+
 GraphAnalyzer::GraphAnalyzer(Library* library, Factors* factors, GraphCreator* graphCreator)
     : p_library(library), p_factors(factors), p_graphCreator(graphCreator), p_outputPathRuntime(0), p_transitionPathRuntime(0)
 {
@@ -46,7 +48,8 @@ void GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
             if( p_dfsCache[*it].pathRuntime < p_dfsCache[element].pathRuntime + element->getBaseRuntime() ) {
                 if( ( p_dfsCache[*it].pathRuntime || *it == start ) && p_dfsCache[*it].predecessor != element ) {
                     p_dfsCache[*it].predecessor = element;
-                    //if(  ) do cycleSearch
+                    if( traceBack(*it,element) )
+                        cout << "DEBUG: *it " << *it << " element " << element << " start " << start << endl;
                 }
                 p_dfsCache[*it].pathRuntime = p_dfsCache[element].pathRuntime + element->getBaseRuntime();
                 p_dfsCache[*it].predecessor = element;
@@ -57,6 +60,16 @@ void GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
         p_outputPathRuntime = p_dfsCache[element].pathRuntime + element->getBaseRuntime();
         p_outputPath = createSequenceString(element,start);
     }
+}
+
+bool GraphAnalyzer::traceBack(GateElement* element, GateElement* target) //tries to go from element to target, but the reverse way!
+{
+    while( element && !element->getGateType()->getIsFlipflop() ) {
+        if( element == target )
+            return true;
+        element = p_dfsCache[element].predecessor;
+    }
+    return false;
 }
 
 string GraphAnalyzer::createSequenceString(GateElement* last, GateElement* first)
