@@ -49,10 +49,8 @@ bool GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
             if( p_dfsCache[*it].pathRuntime < p_dfsCache[element].pathRuntime + element->getBaseRuntime() ) {
                 if( ( p_dfsCache[*it].pathRuntime || *it == start ) && p_dfsCache[*it].predecessor != element ) {
                     p_dfsCache[*it].predecessor = element;
-                    if( traceBack(*it,element) ) {
-                        cout << "FEHLER: Zyklus zwischen " << (*it)->getName() << " und " << element->getName() << " erkannt!" << endl;
-                        return false;
-                    }
+                    cout << "FEHLER: Zyklus zwischen " << (*it)->getName() << " und " << element->getName() << " erkannt!" << endl;
+                    return false;
                 }
                 p_dfsCache[*it].pathRuntime = p_dfsCache[element].pathRuntime + element->getBaseRuntime();
                 p_dfsCache[*it].predecessor = element;
@@ -65,16 +63,6 @@ bool GraphAnalyzer::doDfs(GateElement* element, GateElement* start)
         p_outputPath = createSequenceString(element,start);
     }
     return true;
-}
-
-bool GraphAnalyzer::traceBack(GateElement* element, GateElement* target) //tries to go from element to target, but the reverse way!
-{
-    while( element && !element->getGateType()->getIsFlipflop() ) {
-        if( element == target )
-            return true;
-        element = p_dfsCache[element].predecessor;
-    }
-    return false;
 }
 
 string GraphAnalyzer::createSequenceString(GateElement* last, GateElement* first)
