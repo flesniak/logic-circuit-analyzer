@@ -1,7 +1,7 @@
 #include "gateelement.h"
 
 GateElement::GateElement(const Gate* gateType, const string& name)
-    : p_name(name), p_gateType(gateType), p_isInputElement(false), p_isOutputElement(false), p_baseRuntime(0)
+    : p_name(name), p_gateType(gateType), p_isInputElement(false), p_isOutputElement(false), p_baseRuntime(0), p_connectedInputs(0)
 {
 }
 
@@ -73,3 +73,17 @@ void GateElement::setBaseRuntime(double runtime)
     p_baseRuntime = runtime;
 }
 
+unsigned short GateElement::getConnectedInputCount() const
+{
+    return p_connectedInputs;
+}
+
+void GateElement::setConnectedInputCount(unsigned short count)
+{
+    p_connectedInputs = count;
+}
+
+void GateElement::incConnectedInputCount()
+{
+    p_connectedInputs++;
+}

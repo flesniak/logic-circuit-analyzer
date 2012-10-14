@@ -57,12 +57,12 @@ bool GraphCreator::createGraph()
                 successor->getGateElement()->setIsInputElement(true);
             else //input signals don't have a source
                 newElement->getGateElement()->addSuccessor(successor->getGateElement());
-            inputCount[successor->getGateElement()]++;
+            successor->getGateElement()->incConnectedInputCount();
         }
     }
-    for( map<GateElement*,unsigned char>::iterator it = inputCount.begin(); it != inputCount.end(); it++ )
-        if( it->first->getGateType()->getInputCount() != it->second )
-            cout << "WARNUNG: Gatter " << it->first->getName() << " hat " << it->first->getGateType()->getInputCount() << " Eingänge, von denen nur " << (int)it->second << " beschaltet sind." << endl;
+    for( ListElement* element = p_firstElement; element != 0; element = element->getNextElement() )
+        if( element->getGateElement()->getConnectedInputCount() != element->getGateElement()->getGateType()->getInputCount() )
+            cout << "WARNUNG: Gatter " << element->getGateElement()->getName() << " hat " << element->getGateElement()->getGateType()->getInputCount() << " Eingänge, von denen nur " << element->getGateElement()->getConnectedInputCount() << " beschaltet sind." << endl;
     return true;
 }
 
