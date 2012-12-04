@@ -27,7 +27,7 @@ class Factors
         static string processTypeToString(processType type);
 
     private:
-        double p_circVoltage;
+        double p_circVoltage; //given in units of 0.01 volts
         double p_circTemperature;
         processType p_processType;
         map<short,double> p_voltageMap;

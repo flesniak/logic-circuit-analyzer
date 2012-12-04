@@ -41,12 +41,12 @@ Factors::Factors()
 
 double Factors::getCircVoltage() const
 {
-    return p_circVoltage;
+    return p_circVoltage/100;
 }
 
 bool Factors::setCircVoltage(double voltage)
 {
-    if( voltage < -25 || voltage > 125 )
+    if( voltage < 1.08 || voltage > 1.32 )
         return false;
     p_circVoltage = voltage*100; //internal centi-Volts
     return true;
